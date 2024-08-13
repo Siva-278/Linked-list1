@@ -1,0 +1,3 @@
+Original list: 1 -> 2 -> 3 -> 4 -> 5 -> NULL 
+After inserting in the middle: 1 -> 2 -> 3 -> 10 -> 4 -> 5 -> NULL 
+After deleting the middle node: 1 -> 2 -> 10 -> 4 -> 5 -> NULL
