@@ -1,0 +1,98 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertAtEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        struct Node* temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+void display(struct Node* head) {
+    while (head != NULL) {
+        printf("%d -> ", head->data);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+
+void insertInMiddle(struct Node** head, int data) {
+    if (*head == NULL) {
+        *head = createNode(data);
+    } else {
+        struct Node* slowPtr = *head;
+        struct Node* fastPtr = (*head)->next;
+        while (fastPtr != NULL && fastPtr->next != NULL) {
+            slowPtr = slowPtr->next;
+            fastPtr = fastPtr->next->next;
+        }
+        struct Node* newNode = createNode(data);
+        newNode->next = slowPtr->next;
+        slowPtr->next = newNode;
+    }
+}
+
+void deleteMiddleNode(struct Node** head) {
+    if (*head == NULL || (*head)->next == NULL) {
+        printf("List is empty or has only one node\n");
+        return;
+    }
+
+    struct Node* slowPtr = *head;
+    struct Node* fastPtr = (*head)->next;
+    struct Node* prevPtr = NULL;
+
+    while (fastPtr != NULL && fastPtr->next != NULL) {
+        prevPtr = slowPtr;
+        slowPtr = slowPtr->next;
+        fastPtr = fastPtr->next->next;
+    }
+
+    if (prevPtr) {
+        prevPtr->next = slowPtr->next;
+    } else {
+        *head = slowPtr->next;
+    }
+    free(slowPtr);
+}
+
+int main() {
+    struct Node* head = NULL;
+
+    insertAtEnd(&head, 1);
+    insertAtEnd(&head, 2);
+    insertAtEnd(&head, 3);
+    insertAtEnd(&head, 4);
+    insertAtEnd(&head, 5);
+
+    printf("Original list: ");
+    display(head);
+
+    insertInMiddle(&head, 10);
+    printf("After inserting in the middle: ");
+    display(head);
+
+    deleteMiddleNode(&head);
+    printf("After deleting the middle node: ");
+    display(head);
+
+    return 0;
+}
